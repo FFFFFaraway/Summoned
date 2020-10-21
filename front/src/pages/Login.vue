@@ -28,9 +28,9 @@ export default {
       .then(function(response) {
         alert(response.data.message)
         if(response.data.message == "successfully log in"){
-          that.$store.commit("auth/set", true)
+          that.$store.commit("auth/set", response.data.user_id)
           that.$router.push("home")
-        }else return
+        } else return
       })
       .catch(function(response) {
         console.log(response)

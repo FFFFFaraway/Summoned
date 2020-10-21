@@ -1,10 +1,16 @@
 <template>
   <div>
+    <div v-if="this.signed >= 0">
     <h1>Others released Summoned</h1>
     <list :summoneds="summoneds"/>
+    </div>
+    <div v-else>
+      <p>please sign in for more information</p>
+    </div>
   </div>
 </template>
 <script>
+import {mapState} from "vuex";
 import list from '../components/SummonedList'
 export default {
   components: {
@@ -14,6 +20,9 @@ export default {
     return {
       summoneds: [],
     }
+  },
+  computed: {
+    ...mapState("auth", ["signed"]),
   },
   mounted() {
     let that = this

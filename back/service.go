@@ -72,6 +72,7 @@ func login(context *gin.Context) {
 			}
 			context.JSON(http.StatusOK, gin.H{
 				"message": "successfully log in",
+				"user_id": user.ID,
 			})
 		} else {
 			context.JSON(http.StatusOK, gin.H{
@@ -168,19 +169,75 @@ func getSummonedByDefault(context *gin.Context) {
 	getSummonedByOP(context, "=")
 }
 
+func updateSummonedByDefault(context *gin.Context) {
+	var summoned Summoned
+	if err = context.ShouldBind(&summoned); err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Bind failed"})
+		return
+	}
+	file, header, err := context.Request.FormFile("img")
+	var summonedInMysql Summoned
+	db.First(&summonedInMysql, summoned.ID)
+	summonedInMysql.Type = summoned.Type
+	summonedInMysql.Name = summoned.Name
+	summonedInMysql.Desc = summoned.Desc
+	summonedInMysql.People = summoned.People
+	summonedInMysql.Ddl = summoned.Ddl
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		print("image didn't upload, we keep it\n")
+		db.Save(&summonedInMysql)
+		return
+	}
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return
+	}
+	if err = ioutil.WriteFile("./img/"+header.Filename, content, 0644); err != nil {
+		fmt.Printf("%v\n", err)
+		return
+	}
+	summonedInMysql.Img = header.Filename
+	db.Save(&summonedInMysql)
+	context.JSON(http.StatusOK, gin.H{
+		"message": "successfully update summoned",
+	})
+}
+
+func deleteSummonedByDefault(context *gin.Context) {
+	var summoned Summoned
+	if err = context.ShouldBind(&summoned); err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Bind failed"})
+		return
+	}
+	var summonedInMysql Summoned
+	db.First(&summonedInMysql, summoned.ID)
+	db.Delete(&summonedInMysql)
+	context.JSON(http.StatusOK, gin.H{
+		"message": "successfully delete summoned",
+	})
+}
+
 func getSummonedExceptDefault(context *gin.Context) {
 	getSummonedByOP(context, "<>")
 }
 
-func isLogin(context *gin.Context) bool{
+func getLoginUserId(context *gin.Context) int{
 	session := sessions.Default(context)
 	userId := session.Get("user_id")
-	return userId != nil
+	if userId == nil {
+		return -1
+	}
+	val := int(userId.(uint))
+	return val
 }
 
 func getIsLogin(context *gin.Context){
 	context.JSON(http.StatusOK, gin.H{
-		"signed": isLogin(context),
+		"signed": getLoginUserId(context),
 	})
 }
 
@@ -192,10 +249,10 @@ func logout(context *gin.Context){
 }
 
 func loginMid(context *gin.Context) {
-	if isLogin(context) {
+	if getLoginUserId(context) >= 0 {
 		context.Next()
 	}else{
-		context.JSON(http.StatusUnauthorized, gin.H{})
+		context.JSON(http.StatusUnauthorized, nil)
 		context.Abort()
 	}
 }

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="this.signed >= 0">
     <h1>Profile</h1>
     <p>Hello {{user.Username}}</p>
     <p>Your Phone number: {{user.Phone}}</p>
@@ -14,11 +15,15 @@
     <input type="number" v-model="phone" id="phone">
 
     <button @click="submit">Save</button>
+    </div>
+    <div v-else>
+      <p>please sign in for more information</p>
+    </div>
   </div>
 </template>
 
 <script>
-
+import {mapState} from "vuex";
 export default {
   data() {
     return {
@@ -32,6 +37,9 @@ export default {
       password: "",
       phone: "",
     }
+  },
+  computed: {
+    ...mapState("auth", ["signed"]),
   },
   methods: {
     submit(){

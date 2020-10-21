@@ -1,13 +1,13 @@
 <template>
   <div>
     <router-link to="/home">Home</router-link> |
-    <router-link to="/signup" v-show="!signed">Sign up</router-link> |
-    <router-link to="/login" v-show="!signed">Log in</router-link> |
-    <router-link to="/profile" v-show="signed">Profile</router-link> |
-    <router-link to="/mysummoned" v-show="signed">My summoned</router-link> |
-    <router-link to="/othersummoned" v-show="signed">Others summoned</router-link> |
+    <router-link to="/signup" v-show="!signedIn">Sign up</router-link> |
+    <router-link to="/login" v-show="!signedIn">Log in</router-link> |
+    <router-link to="/profile" v-show="signedIn">Profile</router-link> |
+    <router-link to="/mysummoned" v-show="signedIn">My summoned</router-link> |
+    <router-link to="/othersummoned" v-show="signedIn">Others summoned</router-link> |
     <router-link to="/summoned">Search summoned</router-link> |
-    <button @click="logout" v-show="signed">Log out</button>
+    <button @click="logout" v-show="signedIn">Log out</button>
   </div>
 </template>
 
@@ -16,6 +16,9 @@ import {mapState} from "vuex";
 export default {
   computed: {
     ...mapState("auth", ["signed"]),
+    signedIn() {
+      return this.signed >= 0
+    }
   },
   methods: {
     logout() {
@@ -23,7 +26,7 @@ export default {
       this.$axios.post('signed')
       .then(function() {
         alert("successfully log out.")
-        that.$store.commit("auth/set", false)
+        that.$store.commit("auth/set", -1)
       })
       .catch(function(response) {
         console.log(response)

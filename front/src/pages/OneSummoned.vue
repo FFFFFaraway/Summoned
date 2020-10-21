@@ -14,18 +14,30 @@
         <li>Status: {{summoned.Status}}</li>
       </ul>
     </div>
+    <div v-show="this.summoned.UserID==this.signed">
+    <hr>
+    <h1>Update Your Summoned</h1>
+    <updSum :newSummoned="this.summoned"/>
+    </div>
   </div>
 </template>
 
 <script>
-
+import {mapState} from "vuex";
+import updSum from '../components/UpdateSummoned'
 export default {
+  components: {
+    'updSum': updSum,
+  },
   data() {
     return {
       id: this.$route.params.id,
       summoned: {},
       message: null,
     }
+  },
+  computed: {
+    ...mapState("auth", ["signed"]),
   },
   mounted() {
     let that = this
@@ -41,4 +53,3 @@ export default {
 }
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
