@@ -1,7 +1,6 @@
-package main
+package common
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
@@ -25,6 +24,4 @@ type Summoned struct {
 	Status string
 }
 
-var db *gorm.DB
-var r *gin.Engine
-var err error
+var DB *gorm.DB

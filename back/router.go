@@ -1,6 +1,7 @@
 package main
 
 import (
+	"back/service"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,7 @@ import (
 func myRouter() *gin.Engine {
 	r = gin.Default()
 	store := cookie.NewStore([]byte("secret"))
-	r.Use(sessions.Sessions("mysession", store), corsConfig())
+	r.Use(sessions.Sessions("mysession", store), service.GetCorsConfig())
 
 	r.POST("/signup", signup)
 	r.POST("/login", login)
