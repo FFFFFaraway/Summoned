@@ -20,12 +20,16 @@ func myRouter() *gin.Engine {
 
 	r.Use(loginMid)
 
-	r.GET("/profile", getProfile)
-	r.POST("/profile", updateProfile)
-	r.POST("/mysummoned", newSummoned)
-	r.GET("/mysummoned", getSummonedByDefault)
-	r.PUT("/mysummoned", updateSummonedByDefault)
-	r.DELETE("/mysummoned", deleteSummonedByDefault)
+	{
+		r.GET("/profile", getProfile)
+		r.POST("/profile", updateProfile)
+	}
+	{
+		r.GET("/mysummoned", getSummonedByDefault)
+		r.POST("/mysummoned", newSummoned)
+		r.PUT("/mysummoned", updateSummonedByDefault)
+		r.DELETE("/mysummoned", deleteSummonedByDefault)
+	}
 	r.GET("/othersummoned", getSummonedExceptDefault)
 	r.POST("/signed", logout)
 	return r

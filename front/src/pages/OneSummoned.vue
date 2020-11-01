@@ -14,10 +14,15 @@
         <li>Status: {{summoned.Status}}</li>
       </ul>
     </div>
-    <div v-show="this.summoned.UserID==this.signed">
-    <hr>
-    <h1>Update Your Summoned</h1>
-    <updSum :newSummoned="this.summoned"/>
+    <div v-if="this.summoned.UserID==this.signed">
+      <hr>
+      <h1>Update Your Summoned</h1>
+      <updSum :summoned="this.summoned"/>
+    </div>
+    <div v-else>
+      <hr>
+      <h1>Take This Summoned</h1>
+      <reqSum :summoned="this.summoned"/>
     </div>
   </div>
 </template>
@@ -25,9 +30,11 @@
 <script>
 import {mapState} from "vuex";
 import updSum from '../components/UpdateSummoned'
+import reqSum from '../components/RequestSummoned'
 export default {
   components: {
     'updSum': updSum,
+    'reqSum': reqSum,
   },
   data() {
     return {
@@ -38,6 +45,11 @@ export default {
   },
   computed: {
     ...mapState("auth", ["signed"]),
+  },
+  methods: {
+    request() {
+
+    }
   },
   mounted() {
     let that = this

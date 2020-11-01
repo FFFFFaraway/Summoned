@@ -24,4 +24,14 @@ type Summoned struct {
 	Status string
 }
 
+type Request struct {
+	gorm.Model
+	SummonedID int
+	Summoned   Summoned
+	UserID     int
+	User       User
+	Desc       string `form:"desc" json:"desc"`
+	Status     string
+}
+
 var DB *gorm.DB

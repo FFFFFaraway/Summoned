@@ -1,17 +1,17 @@
 <template>
   <div>
-    <multiselect v-model="newSummoned.type" :options="options"></multiselect>
+    <multiselect v-model="summoned.type" :options="options"></multiselect>
     <label for="name">Name: </label>
-    <input type="text" v-model="newSummoned.name" id="name">
+    <input type="text" v-model="summoned.name" id="name">
     <br>
     <label for="desc">Description: </label>
-    <input type="text" v-model="newSummoned.desc" id="desc">
+    <input type="text" v-model="summoned.desc" id="desc">
     <br>
     <label for="people">People Needed: </label>
-    <input type="number" v-model.number="newSummoned.people" id="people">
+    <input type="number" v-model.number="summoned.people" id="people">
     <br>
     <label for="ddl">Deadline: </label>
-    <input type="text" v-model="newSummoned.ddl" id="ddl">
+    <input type="text" v-model="summoned.ddl" id="ddl">
     <br>
     <label for="img">Image: </label>
     <input type="file" @change="processImg($event)" id="img">
@@ -25,31 +25,30 @@
 
 export default {
   props: {
-    newSummoned: {},
+    summoned: {},
   },
   data() {
     return {
       options: ['技术交流','学业探讨','社会实践','公益志愿者','游玩','其它'],
-      message: "",
     }
   },
   methods: {
     submit(){
       let that = this
       var formData = new FormData();
-      if(this.newSummoned.type == null || this.newSummoned.name == "" ||
-      this.newSummoned.desc == "" || this.newSummoned.people == 0 ||
-      this.newSummoned.ddl == ""){
+      if(this.summoned.type == null || this.summoned.name == "" ||
+      this.summoned.desc == "" || this.summoned.people == 0 ||
+      this.summoned.ddl == ""){
         alert("Please fill all information before " + this.type)
         return
       }
-      formData.append('ID', this.newSummoned.ID);
-      formData.append('type', this.newSummoned.type);
-      formData.append('name', this.newSummoned.name);
-      formData.append('desc', this.newSummoned.desc);
-      formData.append('people', this.newSummoned.people);
-      formData.append('ddl', this.newSummoned.ddl);
-      formData.append('img', this.newSummoned.img);
+      formData.append('ID', this.summoned.ID);
+      formData.append('type', this.summoned.type);
+      formData.append('name', this.summoned.name);
+      formData.append('desc', this.summoned.desc);
+      formData.append('people', this.summoned.people);
+      formData.append('ddl', this.summoned.ddl);
+      formData.append('img', this.summoned.img);
       
       this.$axios.put('mysummoned', formData, {
           headers: {
@@ -65,12 +64,12 @@ export default {
       })
     },
     processImg(event){
-      this.newSummoned.img = event.target.files[0]
+      this.summoned.img = event.target.files[0]
     },
     deleteSummoned( ) {
       let that = this
       var formData = new FormData();
-      formData.append('ID', this.newSummoned.ID);
+      formData.append('ID', this.summoned.ID);
       this.$axios.delete('mysummoned', formData)
       .then(function() {
         alert("Successfully delete the summoned")
