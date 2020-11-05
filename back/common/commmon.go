@@ -31,6 +31,7 @@ type Request struct {
 	UserID     int
 	User       User
 	Desc       string `form:"desc" json:"desc"`
+	// Status: ["Not", "Waiting", "Accepted", "Rejected"]
 	Status     string
 }
 

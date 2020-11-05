@@ -30,6 +30,13 @@ func myRouter() *gin.Engine {
 		r.PUT("/mysummoned", updateSummonedByDefault)
 		r.DELETE("/mysummoned", deleteSummonedByDefault)
 	}
+	{
+		r.GET("/requestStatus/:id", getRequestStatus)
+		r.PUT("/requestStatus/:id", updateRequestStatus)
+		r.GET("/request/:id", getRequest)
+		r.GET("/requestByUser", getRequestByUser)
+		r.POST("/request", newRequest)
+	}
 	r.GET("/othersummoned", getSummonedExceptDefault)
 	r.POST("/signed", logout)
 	return r

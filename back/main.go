@@ -19,6 +19,7 @@ func main() {
 	}
 	common.DB.AutoMigrate(&common.User{})
 	common.DB.AutoMigrate(&common.Summoned{})
+	common.DB.AutoMigrate(&common.Request{})
 	defer common.DB.Close()
 	r := myRouter()
 	if err = r.Run("127.0.0.1:9999"); err != nil {

@@ -1,9 +1,14 @@
 <template>
   <div>
-    <label for="desc">Description: </label>
-    <input type="text" v-model="newRequest.desc" id="desc">
-    <br>
-    <button @click="submit">Request</button>
+    <div v-if="haveRequested">
+      <p>Waiting Response</p>
+    </div>
+    <div v-else>
+      <label for="desc">Description: </label>
+      <input type="text" v-model="newRequest.desc" id="desc">
+      <br>
+      <button @click="submit">Request</button>
+    </div>
   </div>
 </template>
 
@@ -12,6 +17,7 @@
 export default {
   props: {
     summoned: {},
+    haveRequested: Boolean,
   },
   data() {
     return {
@@ -29,11 +35,8 @@ export default {
         return
       }
       formData.append('desc', this.newRequest.desc);
-      this.$axios.post('mysummoned', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-      })
+      formData.append('ID', this.summoned.ID);
+      this.$axios.post('request', formData)
       .then(function() {
         alert("Successfully sent request, please wait for response")
         that.$router.go()
