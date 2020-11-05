@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-if="this.signed >= 0">
-    <h1>My released Summoneds</h1>
-    <list :summoneds="summoneds"/>
-    <hr>
-    <h1>Release a NEW Summoned</h1>
-    <creSum/>
+      <h1>My released Summoneds</h1>
+      <list :summoneds="summoneds" />
+      <hr />
+      <h1>Release a NEW Summoned</h1>
+      <creSum />
     </div>
     <div v-else>
       <p>please sign in for more information</p>
@@ -14,31 +14,32 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
-import list from '../components/SummonedList'
-import creSum from '../components/CreateSummoned'
+import { mapState } from "vuex";
+import list from "../components/SummonedList";
+import creSum from "../components/CreateSummoned";
 export default {
   components: {
-    'list': list,
-    'creSum': creSum,
+    list: list,
+    creSum: creSum,
   },
   data() {
     return {
       summoneds: [],
-    }
+    };
   },
   computed: {
     ...mapState("auth", ["signed"]),
   },
   mounted() {
-    let that = this
-    this.$axios.get('mysummoned')
-    .then(function(response) {
-      that.summoneds = response.data
-    })
-    .catch(function(response) {
-        console.log(response)
-    })
-  }
-}
+    let that = this;
+    this.$axios
+      .get("mysummoned")
+      .then(function (response) {
+        that.summoneds = response.data;
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+  },
+};
 </script>

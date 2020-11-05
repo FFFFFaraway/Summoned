@@ -5,15 +5,14 @@
     </div>
     <div v-else>
       <label for="desc">Description: </label>
-      <input type="text" v-model="newRequest.desc" id="desc">
-      <br>
+      <input type="text" v-model="newRequest.desc" id="desc" />
+      <br />
       <button @click="submit">Request</button>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
     summoned: {},
@@ -23,30 +22,31 @@ export default {
     return {
       newRequest: {
         desc: "",
-      }
-    }
+      },
+    };
   },
   methods: {
-    submit(){
-      let that = this
+    submit() {
+      let that = this;
       var formData = new FormData();
-      if(this.newRequest.desc == null){
-        alert("Please fill desc before request")
-        return
+      if (this.newRequest.desc == null) {
+        alert("Please fill desc before request");
+        return;
       }
-      formData.append('desc', this.newRequest.desc);
-      formData.append('ID', this.summoned.ID);
-      this.$axios.post('request', formData)
-      .then(function() {
-        alert("Successfully sent request, please wait for response")
-        that.$router.go()
-      })
-      .catch(function(response) {
-        console.log(response)
-      })
-    }
-  }
-}
+      formData.append("desc", this.newRequest.desc);
+      formData.append("ID", this.summoned.ID);
+      this.$axios
+        .post("request", formData)
+        .then(function () {
+          alert("Successfully sent request, please wait for response");
+          that.$router.go();
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+    },
+  },
+};
 </script>
 
 
