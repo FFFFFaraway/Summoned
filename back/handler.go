@@ -89,13 +89,13 @@ func newSummoned(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Bind failed"})
 		return
 	}
-	file, header, err := context.Request.FormFile("img")
+	file, _, err := context.Request.FormFile("img")
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		return
 	}
 	userId := service.DefaultUserId(context)
-	if err = service.NewSummoned(summoned, file, header, userId); err != nil {
+	if err = service.NewSummoned(summoned, file, userId); err != nil {
 		fmt.Printf("%v\n", err)
 		return
 	}

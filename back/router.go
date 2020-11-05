@@ -17,6 +17,7 @@ func myRouter() *gin.Engine {
 	r.GET("/signed", getIsLogin)
 	r.GET("/summoned", getAllSummoned)
 	r.GET("/summoned/:id", getSummoned)
+	r.Static("img", "img")
 
 	r.Use(loginMid)
 

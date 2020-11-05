@@ -13,6 +13,7 @@
         <li>Img: {{summoned.Img}}</li>
         <li>Status: {{summoned.Status}}</li>
       </ul>
+      <img :src="this.$axios.defaults.baseURL + '/img/' + this.summoned.Img">
     </div>
 
     <div v-if="this.summoned.UserID==this.signed">

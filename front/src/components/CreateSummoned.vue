@@ -11,7 +11,7 @@
     <input type="number" v-model.number="newSummoned.people" id="people">
     <br>
     <label for="ddl">Deadline: </label>
-    <input type="text" v-model="newSummoned.ddl" id="ddl">
+    <input type="date" v-model="newSummoned.ddl" id="ddl">
     <br>
     <label for="img">Image: </label>
     <input type="file" @change="processImg($event)" id="img">

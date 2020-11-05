@@ -2,6 +2,7 @@ package service
 
 import (
 	"back/common"
+	"github.com/dchest/uniuri"
 	"io/ioutil"
 	"mime/multipart"
 )
@@ -18,24 +19,25 @@ func GetAllSummoned() []common.Summoned {
 	return summoneds
 }
 
-func saveFile(file multipart.File, header *multipart.FileHeader) error {
+func saveFile(file multipart.File, fileName string) error {
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
 		return err
 	}
-	if err = ioutil.WriteFile("./img/"+header.Filename, content, 0644); err != nil {
+	if err = ioutil.WriteFile("./img/"+fileName, content, 0644); err != nil {
 		return err
 	}
 	return nil
 }
 
-func NewSummoned(summoned common.Summoned, file multipart.File, header *multipart.FileHeader, userId interface{}) error{
+func NewSummoned(summoned common.Summoned, file multipart.File, userId interface{}) error{
 	summoned.UserID = int(userId.(uint))
 	summoned.Status = "Waiting"
-	if err = saveFile(file, header); err != nil {
+	fileName := uniuri.New()
+	if err = saveFile(file, fileName); err != nil {
 		return err
 	}
-	summoned.Img = header.Filename
+	summoned.Img = fileName
 	common.DB.Create(&summoned)
 	return nil
 }
@@ -63,10 +65,11 @@ func UpdateSummoned(summoned common.Summoned, file multipart.File, header *multi
 	summonedInMysql.People = summoned.People
 	summonedInMysql.Ddl = summoned.Ddl
 	if !keepImg {
-		if err = saveFile(file, header); err != nil {
+		fileName := uniuri.New()
+		if err = saveFile(file, fileName); err != nil {
 			return err
 		}
-		summonedInMysql.Img = header.Filename
+		summonedInMysql.Img = fileName
 	}
 	common.DB.Save(&summonedInMysql)
 	return nil
