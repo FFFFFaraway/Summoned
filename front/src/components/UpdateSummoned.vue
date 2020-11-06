@@ -79,10 +79,8 @@ export default {
     },
     deleteSummoned() {
       let that = this;
-      var formData = new FormData();
-      formData.append("ID", this.summoned.ID);
       this.$axios
-        .delete("mysummoned", formData)
+        .delete("mysummoned/" + this.summoned.ID)
         .then(function () {
           alert("Successfully delete the summoned");
           that.$router.go();

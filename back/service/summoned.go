@@ -5,6 +5,7 @@ import (
 	"github.com/dchest/uniuri"
 	"io/ioutil"
 	"mime/multipart"
+	"os"
 )
 
 func GetSummonedById(id string) (*common.Summoned, error){
@@ -56,7 +57,7 @@ func GetSummonedExceptUserId(userId interface{}) []common.Summoned{
 	return getSummonedOpUserId("<>", userId)
 }
 
-func UpdateSummoned(summoned common.Summoned, file multipart.File, header *multipart.FileHeader, keepImg bool) error{
+func UpdateSummoned(summoned common.Summoned, file multipart.File, keepImg bool) error{
 	var summonedInMysql common.Summoned
 	common.DB.First(&summonedInMysql, summoned.ID)
 	summonedInMysql.Type = summoned.Type
@@ -75,8 +76,12 @@ func UpdateSummoned(summoned common.Summoned, file multipart.File, header *multi
 	return nil
 }
 
-func DeleteSummoned(summoned common.Summoned) {
+func DeleteSummoned(summonedId int) error{
 	var summonedInMysql common.Summoned
-	common.DB.First(&summonedInMysql, summoned.ID)
+	common.DB.First(&summonedInMysql, summonedId)
+	if err = os.Remove("./img/" + summonedInMysql.Img); err != nil {
+		return err
+	}
 	common.DB.Delete(&summonedInMysql)
+	return nil
 }

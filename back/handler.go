@@ -117,10 +117,10 @@ func updateSummonedByDefault(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Bind failed"})
 		return
 	}
-	file, header, err := context.Request.FormFile("img")
+	file, _, err := context.Request.FormFile("img")
 	// if no image uploaded for updating, we keep it constant
 	keepImg := err != nil
-	if err = service.UpdateSummoned(summoned, file, header, keepImg); err != nil {
+	if err = service.UpdateSummoned(summoned, file, keepImg); err != nil {
 		fmt.Printf("%v\n", err)
 		return
 	}
@@ -129,17 +129,18 @@ func updateSummonedByDefault(context *gin.Context) {
 	})
 }
 
-func deleteSummonedByDefault(context *gin.Context) {
-	var summoned common.Summoned
-	if err = context.ShouldBind(&summoned); err != nil {
+func deleteSummoned(context *gin.Context) {
+	var summonedId int
+	if summonedId, err = strconv.Atoi(context.Param("id")); err != nil {
 		fmt.Printf("%v\n", err)
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Bind failed"})
+		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
 		return
 	}
-	service.DeleteSummoned(summoned)
-	context.JSON(http.StatusOK, gin.H{
-		"message": "successfully delete summoned",
-	})
+	if err = service.DeleteSummoned(summonedId); err != nil {
+		fmt.Printf("%v\n", err)
+		return
+	}
+	context.JSON(http.StatusOK, nil)
 }
 
 func getRequestStatus(context *gin.Context) {
@@ -242,6 +243,8 @@ func logout(context *gin.Context){
 	session := sessions.Default(context)
 	session.Set("dummy", "content") // this will mark the session as "written"
 	session.Options(sessions.Options{MaxAge: -1})
-	session.Save()
+	if err = session.Save(); err != nil {
+		fmt.Printf("%v\n", err)
+	}
 }
 
