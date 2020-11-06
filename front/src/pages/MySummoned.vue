@@ -15,12 +15,10 @@
 
 <script>
 import { mapState } from "vuex";
-import list from "../components/SummonedList";
-import creSum from "../components/CreateSummoned";
 export default {
   components: {
-    list: list,
-    creSum: creSum,
+    list: () => import("../components/SummonedList"),
+    creSum: () => import("../components/CreateSummoned"),
   },
   data() {
     return {

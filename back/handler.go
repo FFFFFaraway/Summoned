@@ -205,6 +205,33 @@ func newRequest(context *gin.Context) {
 	context.JSON(http.StatusOK, nil)
 }
 
+func updateRequest(context *gin.Context) {
+	var reqId int
+	if reqId, err = strconv.Atoi(context.PostForm("ID")); err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+		return
+	}
+	var reqInMysql common.Request
+	common.DB.First(&reqInMysql, reqId)
+	reqInMysql.Desc = context.PostForm("desc")
+	common.DB.Save(&reqInMysql)
+	context.JSON(http.StatusOK, nil)
+}
+
+func deleteRequest(context *gin.Context) {
+	var reqId int
+	if reqId, err = strconv.Atoi(context.Param("id")); err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+		return
+	}
+	var reqInMysql common.Request
+	common.DB.First(&reqInMysql, reqId)
+	common.DB.Delete(&reqInMysql)
+	context.JSON(http.StatusOK, nil)
+}
+
 func getSummonedExceptDefault(context *gin.Context) {
 	userId := service.DefaultUserId(context)
 	summoneds := service.GetSummonedExceptUserId(userId)

@@ -37,6 +37,8 @@ func myRouter() *gin.Engine {
 		r.GET("/request/:id", getRequest)
 		r.GET("/requestByUser", getRequestByUser)
 		r.POST("/request", newRequest)
+		r.PUT("/request", updateRequest)
+		r.DELETE("/request/:id", deleteRequest)
 	}
 	r.GET("/othersummoned", getSummonedExceptDefault)
 	r.POST("/signed", logout)
