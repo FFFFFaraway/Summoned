@@ -10,9 +10,9 @@
       <div v-else>
         <div v-if="this.signed == this.id">
           <h1>Profile</h1>
-          <p>Hello {{ user.Username }}</p>
-          <p>Your Phone number: {{ user.Phone }}</p>
-          <p>ID: {{ user.ID }}</p>
+          <p>Hello {{ user.username }}</p>
+          <p>Your Phone number: {{ user.phone }}</p>
+          <p>ID: {{ user.id }}</p>
           <p>CreatedAt: {{ user.CreatedAt }}</p>
           <p>UpdatedAt: {{ user.UpdatedAt }}</p>
 
@@ -26,8 +26,8 @@
         </div>
         <div v-else>
           <h1>Other Profile</h1>
-          <p>Username {{ user.Username }}</p>
-          <p>Phone number: {{ user.Phone }}</p>
+          <p>Username {{ user.username }}</p>
+          <p>Phone number: {{ user.phone }}</p>
           <p>ID: {{ user.ID }}</p>
         </div>
       </div>
@@ -41,13 +41,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      user: {
-        Username: "",
-        Phone: "",
-        ID: -1,
-        CreatedAt: "-1",
-        UpdatedAt: "-1",
-      },
+      user: {},
       password: "",
       phone: "",
       message: null,

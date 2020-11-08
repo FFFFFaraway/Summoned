@@ -58,7 +58,7 @@ export default {
       formData.append("desc", this.summoned.desc);
       formData.append("people", this.summoned.people);
       formData.append("ddl", this.summoned.ddl);
-      formData.append("img", this.summoned.img);
+      formData.append("img", this.summoned.Img);
 
       this.$axios
         .put("mysummoned", formData, {
@@ -75,7 +75,7 @@ export default {
         });
     },
     processImg(event) {
-      this.summoned.img = event.target.files[0];
+      this.summoned.Img = event.target.files[0];
     },
     deleteSummoned() {
       let that = this;

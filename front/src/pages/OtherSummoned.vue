@@ -9,12 +9,12 @@
       <ul>
         <li v-for="r in passedRequests" :key="r.ID">
           <p>
-            Summoned ID: {{ r.SummonedID }}, Desc: {{ r.desc }}, Status: {{ r.Status }}
+            Summoned ID: {{ r.summoned_id }}, Desc: {{ r.desc }}, Status: {{ r.status }}
           </p>
         </li>
         <li v-for="r in waitRequests" :key="r.ID">
           <p>
-            Summoned ID: {{ r.SummonedID }},
+            Summoned ID: {{ r.summoned_id }},
             Desc: 
             <input type="text" v-model="r.desc">,
             Status: {{ r.Status }}
@@ -44,17 +44,17 @@ export default {
   computed: {
     ...mapState("auth", ["signed"]),
     passedRequests() {
-      return this.requests.filter(r => r.Status == 'Accepted' || r.Status == 'Rejected')
+      return this.requests.filter(r => r.status == 'Accepted' || r.status == 'Rejected')
     },
     waitRequests() {
-      return this.requests.filter(r => r.Status == 'Waiting')
+      return this.requests.filter(r => r.status == 'Waiting')
     }
   },
   methods: {
     update(request) {
       let that = this;
       var formData = new FormData();
-      formData.append("ID", request.ID);
+      formData.append("id", request.ID);
       formData.append("desc", request.desc);
       this.$axios
         .put("request", formData)

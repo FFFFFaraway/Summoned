@@ -171,7 +171,7 @@ func getRequestStatus(context *gin.Context) {
 
 func updateRequestStatus(context *gin.Context) {
 	summonedId := context.Param("id")
-	userId := context.PostForm("UserID")
+	userId := context.PostForm("user_id")
 	var req common.Request
 	err = common.DB.Where("summoned_id = ? and user_id = ?", summonedId, userId).First(&req).Error
 	if err == gorm.ErrRecordNotFound { // haven't sent request yet
@@ -191,7 +191,7 @@ func updateRequestStatus(context *gin.Context) {
 			context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
 			return
 		}
-		trans.OwnerID = uint(takerID)
+		trans.TakerID = uint(takerID)
 		var people int
 		if people, err = strconv.Atoi(context.PostForm("people")); err != nil {
 			fmt.Printf("%v\n", err)
@@ -226,7 +226,7 @@ func getRequestByUser(context *gin.Context) {
 func newRequest(context *gin.Context) {
 	var req common.Request
 	var summonedID int
-	if summonedID, err = strconv.Atoi(context.PostForm("ID")); err != nil {
+	if summonedID, err = strconv.Atoi(context.PostForm("id")); err != nil {
 		fmt.Printf("%v\n", err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
 		return
@@ -241,7 +241,7 @@ func newRequest(context *gin.Context) {
 
 func updateRequest(context *gin.Context) {
 	var reqId int
-	if reqId, err = strconv.Atoi(context.PostForm("ID")); err != nil {
+	if reqId, err = strconv.Atoi(context.PostForm("id")); err != nil {
 		fmt.Printf("%v\n", err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
 		return

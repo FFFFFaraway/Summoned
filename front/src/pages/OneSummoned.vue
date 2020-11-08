@@ -6,16 +6,16 @@
     <div v-else>
       <sumDtl :summoned="summoned"/>
 
-      <div v-if="this.summoned.UserID == this.signed">
+      <div v-if="this.summoned.user_id == this.signed">
         <hr />
         <h1>Exist Waiting Requests for this summoned</h1>
         <ul>
           <li v-for="r in waitingRequests" :key="r.ID">
-            <p>ID: {{ r.UserID }}, Desc: {{ r.desc }}</p>
-            <router-link :to="'../profile/' + r.UserID">User Profile</router-link>
+            <p>ID: {{ r.user_id }}, Desc: {{ r.desc }}</p>
+            <router-link :to="'../profile/' + r.user_id">User Profile</router-link>
             <br>
-            <button @click="acc(r.UserID)">Accept</button>
-            <button @click="rej(r.UserID)">Reject</button>
+            <button @click="acc(r.user_id)">Accept</button>
+            <button @click="rej(r.user_id)">Reject</button>
           </li>
         </ul>
       </div>
@@ -25,7 +25,7 @@
         <p>Please sign in for more information</p>
       </div>
       <div v-else>
-        <div v-if="this.summoned.UserID == this.signed">
+        <div v-if="this.summoned.user_id == this.signed">
           <div v-if="this.requests.length == 0">
             <h1>Update Your Summoned</h1>
             <updSum :summoned="this.summoned" />
@@ -78,10 +78,10 @@ export default {
     },
   },
   methods: {
-    set(status, UserID) {
+    set(status, user_id) {
       let that = this;
       var formData = new FormData();
-      formData.append("UserID", UserID);
+      formData.append("user_id", user_id);
       formData.append("status", status);
       formData.append("people", this.summoned.people);
       this.$axios
@@ -94,11 +94,11 @@ export default {
           console.log(response);
         });
     },
-    acc(UserID) {
-      this.set("Accepted", UserID);
+    acc(user_id) {
+      this.set("Accepted", user_id);
     },
-    rej(UserID) {
-      this.set("Rejected", UserID);
+    rej(user_id) {
+      this.set("Rejected", user_id);
     },
   },
   mounted() {

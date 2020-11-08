@@ -8,7 +8,7 @@
       <li>desc: {{ summoned.desc }}</li>
       <li>people: {{ summoned.people }}</li>
       <li>ddl: {{ summoned.ddl }}</li>
-      <li>Status: {{ summoned.Status }}</li>
+      <li>Status: {{ summoned.status }}</li>
     </ul>
     <img :src="this.$axios.defaults.baseURL + '/img/' + summoned.Img" />
   </div>

@@ -34,7 +34,7 @@ export default {
         return;
       }
       formData.append("desc", this.newRequest.desc);
-      formData.append("ID", this.summoned.ID);
+      formData.append("id", this.summoned.ID);
       this.$axios
         .post("request", formData)
         .then(function () {
