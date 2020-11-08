@@ -3,7 +3,7 @@
     <router-link to="/home">Home</router-link> |
     <router-link to="/signup" v-show="!signedIn">Sign up</router-link> |
     <router-link to="/login" v-show="!signedIn">Log in</router-link> |
-    <router-link to="/profile" v-show="signedIn">Profile</router-link> |
+    <router-link :to="'/profile/' + this.signed" v-show="signedIn">Profile</router-link> |
     <router-link to="/mysummoned" v-show="signedIn">My summoned</router-link> |
     <router-link to="/othersummoned" v-show="signedIn"
       >Others summoned</router-link

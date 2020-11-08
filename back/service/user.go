@@ -4,8 +4,8 @@ import (
 	"back/common"
 )
 
-func GetUserById(userId interface{}) *common.User {
+func GetUserById(userId interface{}) (*common.User, error) {
 	var user common.User
-	common.DB.First(&user, userId)
-	return &user
+	err = common.DB.First(&user, userId).Error
+	return &user, err
 }

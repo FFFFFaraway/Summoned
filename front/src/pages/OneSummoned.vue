@@ -12,6 +12,8 @@
         <ul>
           <li v-for="r in waitingRequests" :key="r.ID">
             <p>ID: {{ r.UserID }}, Desc: {{ r.desc }}</p>
+            <router-link :to="'../profile/' + r.UserID">User Profile</router-link>
+            <br>
             <button @click="acc(r.UserID)">Accept</button>
             <button @click="rej(r.UserID)">Reject</button>
           </li>

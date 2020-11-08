@@ -62,14 +62,24 @@ func loginMid(context *gin.Context) {
 }
 
 func getProfile(context *gin.Context) {
-	userId := service.DefaultUserId(context)
-	user := service.GetUserById(userId)
+	var userId int
+	if userId, err = strconv.Atoi(context.Param("id")); err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+		return
+	}
+	user, err := service.GetUserById(userId)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		context.JSON(http.StatusOK, gin.H{"message": "User doesn't exist"})
+		return
+	}
 	context.JSON(http.StatusOK, user)
 }
 
 func updateProfile(context *gin.Context) {
 	userId := service.DefaultUserId(context)
-	user := service.GetUserById(userId)
+	user, _ := service.GetUserById(userId)
 	if context.PostForm("password") != "" {
 		user.Password = context.PostForm("password")
 	}

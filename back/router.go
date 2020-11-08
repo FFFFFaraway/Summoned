@@ -22,7 +22,7 @@ func myRouter() *gin.Engine {
 	r.Use(loginMid)
 
 	{
-		r.GET("/profile", getProfile)
+		r.GET("/profile/:id", getProfile)
 		r.POST("/profile", updateProfile)
 	}
 	{

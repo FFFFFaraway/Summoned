@@ -8,7 +8,7 @@ export default new VueRouter({
         { path: '/home', component: () => import('./pages/Home') },
         { path: '/login', component: () => import('./pages/Login') },
         { path: '/signup', component: () => import('./pages/Signup') },
-        { path: '/profile', component: () => import('./pages/Profile') },
+        { path: '/profile/:id', component: () => import('./pages/Profile') },
         { path: '/summoned', component: () => import('./pages/Summoned') },
         { path: '/mysummoned', component: () => import('./pages/MySummoned') },
         { path: '/othersummoned', component: () => import('./pages/OtherSummoned') },
