@@ -182,6 +182,27 @@ func updateRequestStatus(context *gin.Context) {
 	}
 	req.Status = context.PostForm("status")
 	common.DB.Save(&req)
+	if req.Status == "Accepted" {
+		var trans common.Transaction
+		trans.OwnerID = uint(service.GetLoginUserId(context))
+		var takerID int
+		if takerID, err = strconv.Atoi(userId); err != nil {
+			fmt.Printf("%v\n", err)
+			context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+			return
+		}
+		trans.OwnerID = uint(takerID)
+		var people int
+		if people, err = strconv.Atoi(context.PostForm("people")); err != nil {
+			fmt.Printf("%v\n", err)
+			context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+			return
+		}
+		trans.OwnerCost = 3 * people
+		trans.TakerCost = 1
+		common.DB.Create(&trans)
+		context.JSON(http.StatusOK, nil)
+	}
 }
 
 func getRequest(context *gin.Context) {
@@ -204,12 +225,14 @@ func getRequestByUser(context *gin.Context) {
 
 func newRequest(context *gin.Context) {
 	var req common.Request
-	if req.SummonedID, err = strconv.Atoi(context.PostForm("ID")); err != nil {
+	var summonedID int
+	if summonedID, err = strconv.Atoi(context.PostForm("ID")); err != nil {
 		fmt.Printf("%v\n", err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
 		return
 	}
-	req.UserID = int(service.DefaultUserId(context).(uint))
+	req.SummonedID = uint(summonedID)
+	req.UserID = service.DefaultUserId(context).(uint)
 	req.Desc = context.PostForm("desc")
 	req.Status = "Waiting"
 	common.DB.Create(&req)

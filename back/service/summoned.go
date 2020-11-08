@@ -32,7 +32,7 @@ func saveFile(file multipart.File, fileName string) error {
 }
 
 func NewSummoned(summoned common.Summoned, file multipart.File, userId interface{}) error{
-	summoned.UserID = int(userId.(uint))
+	summoned.UserID = userId.(uint)
 	summoned.Status = "Waiting"
 	fileName := uniuri.New()
 	if err = saveFile(file, fileName); err != nil {

@@ -13,8 +13,7 @@ type User struct {
 
 type Summoned struct {
 	gorm.Model
-	UserID int
-	User   User
+	UserID uint
 	Type   string `form:"type" json:"type"`
 	Name   string `form:"name" json:"name"`
 	Desc   string `form:"desc" json:"desc"`
@@ -26,13 +25,19 @@ type Summoned struct {
 
 type Request struct {
 	gorm.Model
-	SummonedID int
-	Summoned   Summoned
-	UserID     int
-	User       User
+	SummonedID uint
+	UserID     uint
 	Desc       string `form:"desc" json:"desc"`
 	// Status: ["Not", "Waiting", "Accepted", "Rejected"]
-	Status     string
+	Status string
+}
+
+type Transaction struct {
+	gorm.Model
+	OwnerID   uint
+	TakerID   uint
+	OwnerCost int
+	TakerCost int
 }
 
 var DB *gorm.DB

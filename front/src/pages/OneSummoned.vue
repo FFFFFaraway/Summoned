@@ -83,6 +83,7 @@ export default {
       var formData = new FormData();
       formData.append("UserID", UserID);
       formData.append("status", status);
+      formData.append("people", this.summoned.people);
       this.$axios
         .put("requestStatus/" + this.id, formData)
         .then(function () {
