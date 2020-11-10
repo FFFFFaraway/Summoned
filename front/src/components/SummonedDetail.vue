@@ -10,7 +10,9 @@
       <li>ddl: {{ summoned.ddl }}</li>
       <li>Status: {{ summoned.status }}</li>
     </ul>
-    <img :src="this.$axios.defaults.baseURL + '/img/' + summoned.Img" />
+    <div v-if="summoned.Img">
+      <img :src="this.$axios.defaults.baseURL + '/img/' + summoned.Img" />
+    </div>
   </div>
 </template>
 

@@ -281,3 +281,23 @@ func logout(context *gin.Context){
 	}
 }
 
+func adminMid(context *gin.Context) {
+	if service.IsAdmin(context) {
+		context.Next()
+	}else{
+		context.JSON(http.StatusUnauthorized, nil)
+		context.Abort()
+	}
+}
+
+func getAllUsers(context *gin.Context) {
+	var users []common.User
+	common.DB.Find(&users)
+	context.JSON(http.StatusOK, users)
+}
+
+func getAllRequests(context *gin.Context) {
+	var reqs []common.Request
+	common.DB.Find(&reqs)
+	context.JSON(http.StatusOK, reqs)
+}

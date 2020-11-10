@@ -5,7 +5,9 @@
     <input type="text" v-model="filterName" id="name" />
     <br />
     <label>Search by Type</label>
-    <multiselect v-model="filterType" :options="options"></multiselect>
+    <el-select v-model="filterType">
+      <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
+    </el-select>
     <hr />
     <list :summoneds="summoneds" />
   </div>

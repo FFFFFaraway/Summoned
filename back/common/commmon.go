@@ -30,7 +30,7 @@ type Request struct {
 	UserID     uint   `form:"user_id" json:"user_id"`
 	Desc       string `form:"desc" json:"desc"`
 	// Status: ["Not", "Waiting", "Accepted", "Rejected"]
-	Status string
+	Status string     `form:"status" json:"status"`
 }
 
 type Transaction struct {

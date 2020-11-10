@@ -68,3 +68,10 @@ func DefaultUserId(context *gin.Context) interface{}{
 	session := sessions.Default(context)
 	return session.Get("user_id")
 }
+
+func IsAdmin(context *gin.Context) bool {
+	userId := DefaultUserId(context)
+	var user common.User
+	common.DB.First(&user, userId)
+	return user.Username == "admin"
+}

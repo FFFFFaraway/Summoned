@@ -12,6 +12,7 @@ export default new VueRouter({
         { path: '/summoned', component: () => import('./pages/Summoned') },
         { path: '/mysummoned', component: () => import('./pages/MySummoned') },
         { path: '/othersummoned', component: () => import('./pages/OtherSummoned') },
-        { path: '/summoned/:id', component: () => import('./pages/OneSummoned') }
+        { path: '/summoned/:id', component: () => import('./pages/OneSummoned') },
+        { path: '/admin', component: () => import('./pages/Admin') }
     ]
 });

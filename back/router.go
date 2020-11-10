@@ -43,5 +43,8 @@ func myRouter() *gin.Engine {
 	}
 	r.GET("/othersummoned", getSummonedExceptDefault)
 	r.POST("/signed", logout)
+	r.Use(adminMid)
+	r.GET("/users", getAllUsers)
+	r.GET("/requestsAll", getAllRequests)
 	return r
 }

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <multiselect v-model="summoned.type" :options="options"></multiselect>
+    <el-select v-model="summoned.type">
+      <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
+    </el-select>
     <label for="name">Name: </label>
     <input type="text" v-model="summoned.name" id="name" />
     <br />
