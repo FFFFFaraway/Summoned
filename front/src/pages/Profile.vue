@@ -14,7 +14,9 @@
               <span>Profile</span>
             </div>
             <p>Hello {{ user.username }}</p>
-            <p v-if="user.is_admin">You are admin</p>
+            <div v-if="user.is_admin">
+              You are admin, <router-link to="../admin">admin page</router-link>
+            </div>
             <p>Your Name: {{ user.name }}</p>
             <p>Your {{user.number_type}} number: {{user.number}}</p>
             <p>Your Phone number: {{ user.phone }}</p>
@@ -45,7 +47,9 @@
             </div>
             <p>Username {{ user.username }}</p>
             <p>Phone number: {{ user.phone }}</p>
-            <p>ID: {{ user.ID }}</p>
+            <p>Rank: {{user.rank}}</p>
+            <p>Introduction: {{user.introduction}}</p>
+            <p>City: {{user.city}}</p>
           </el-card>
         </div>
       </div>
