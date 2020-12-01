@@ -9,26 +9,44 @@
       </div>
       <div v-else>
         <div v-if="this.signed == this.id">
-          <h1>Profile</h1>
-          <p>Hello {{ user.username }}</p>
-          <p>Your Phone number: {{ user.phone }}</p>
-          <p>ID: {{ user.id }}</p>
-          <p>CreatedAt: {{ user.CreatedAt }}</p>
-          <p>UpdatedAt: {{ user.UpdatedAt }}</p>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Profile</span>
+            </div>
+            <p>Hello {{ user.username }}</p>
+            <p v-if="user.is_admin">You are admin</p>
+            <p>Your Name: {{ user.name }}</p>
+            <p>Your {{user.number_type}} number: {{user.number}}</p>
+            <p>Your Phone number: {{ user.phone }}</p>
+            <p>Your Rank: {{user.rank}}</p>
+            <p>Your Introduction: {{user.introduction}}</p>
+            <p>Your City: {{user.city}}</p>
+            
+            <p>Your UID: {{ user.ID }}</p>
+            <p>CreatedAt: {{ user.CreatedAt }}</p>
+            <p>UpdatedAt: {{ user.UpdatedAt }}</p>
 
-          <label for="password">Change Password: </label>
-          <input type="password" v-model="password" id="password" />
+            <label for="password">Change Password: </label>
+            <el-input type="password" v-model="password" id="password" ></el-input>
 
-          <label for="phone">Change Phone number: </label>
-          <input type="number" v-model="phone" id="phone" />
+            <label for="phone">Change Phone number: </label>
+            <el-input type="number" v-model="phone" id="phone" ></el-input>
 
-          <button @click="submit">Save</button>
+            <label for="introduction">Change Introduction: </label>
+            <el-input type="text" v-model="introduction" id="introduction" ></el-input>
+
+            <el-button type="primary" @click="submit">Save</el-button>
+          </el-card>
         </div>
         <div v-else>
-          <h1>Other Profile</h1>
-          <p>Username {{ user.username }}</p>
-          <p>Phone number: {{ user.phone }}</p>
-          <p>ID: {{ user.ID }}</p>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Other Profile</span>
+            </div>
+            <p>Username {{ user.username }}</p>
+            <p>Phone number: {{ user.phone }}</p>
+            <p>ID: {{ user.ID }}</p>
+          </el-card>
         </div>
       </div>
     </div>
@@ -44,6 +62,7 @@ export default {
       user: {},
       password: "",
       phone: "",
+      introduction: "",
       message: null,
     };
   },
@@ -55,6 +74,7 @@ export default {
       var formData = new FormData();
       formData.append("password", this.password);
       formData.append("phone", this.phone);
+      formData.append("introduction", this.introduction);
       let that = this;
       this.$axios
         .post("profile", formData)

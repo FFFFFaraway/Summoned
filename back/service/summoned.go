@@ -6,17 +6,28 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"os"
+	"time"
 )
 
 func GetSummonedById(id string) (*common.Summoned, error){
 	var summoned common.Summoned
 	err = common.DB.Where("id = ?", id).First(&summoned).Error
+	expired, _ := checkExpired(&summoned)
+	if expired {
+		common.DB.Save(&summoned)
+	}
 	return &summoned, err
 }
 
 func GetAllSummoned() []common.Summoned {
 	var summoneds []common.Summoned
 	common.DB.Find(&summoneds)
+	for _, summoned := range summoneds {
+		expired, _ := checkExpired(&summoned)
+		if expired {
+			common.DB.Save(&summoned)
+		}
+	}
 	return summoneds
 }
 
@@ -31,9 +42,25 @@ func saveFile(file multipart.File, fileName string) error {
 	return nil
 }
 
+func checkExpired(summoned *common.Summoned) (bool, error){
+	now := time.Now()
+	ddl, err := time.Parse("2006-01-02", summoned.Ddl)
+	if err != nil {
+		return false, err
+	}
+	if now.After(ddl) {
+		summoned.Status = "Expired"
+		return true, nil
+	}
+	summoned.Status = "Waiting"
+	return false, nil
+}
+
 func NewSummoned(summoned common.Summoned, file multipart.File, userId interface{}) error{
 	summoned.UserID = userId.(uint)
-	summoned.Status = "Waiting"
+	if _, err = checkExpired(&summoned); err != nil {
+		return err
+	}
 	fileName := uniuri.New()
 	if err = saveFile(file, fileName); err != nil {
 		return err
@@ -46,6 +73,12 @@ func NewSummoned(summoned common.Summoned, file multipart.File, userId interface
 func getSummonedOpUserId(op string, userId interface{}) []common.Summoned{
 	var summoneds []common.Summoned
 	common.DB.Where("user_id " + op + " ?", userId).Find(&summoneds)
+	for _, summoned := range summoneds {
+		expired, _ := checkExpired(&summoned)
+		if expired {
+			common.DB.Save(&summoned)
+		}
+	}
 	return summoneds
 }
 
@@ -65,6 +98,9 @@ func UpdateSummoned(summoned common.Summoned, file multipart.File, keepImg bool)
 	summonedInMysql.Desc = summoned.Desc
 	summonedInMysql.People = summoned.People
 	summonedInMysql.Ddl = summoned.Ddl
+	if _, err = checkExpired(&summoned); err != nil {
+		return err
+	}
 	if !keepImg {
 		fileName := uniuri.New()
 		if err = saveFile(file, fileName); err != nil {
@@ -82,6 +118,7 @@ func DeleteSummoned(summonedId int) error{
 	if err = os.Remove("./img/" + summonedInMysql.Img); err != nil {
 		return err
 	}
-	common.DB.Delete(&summonedInMysql)
+	summonedInMysql.Status = "Cancelled"
+	common.DB.Save(&summonedInMysql)
 	return nil
 }

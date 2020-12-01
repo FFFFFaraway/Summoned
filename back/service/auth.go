@@ -2,6 +2,7 @@ package service
 
 import (
 	"back/common"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -11,13 +12,15 @@ var err error
 
 func Signup(context *gin.Context) (error, gin.H){
 	var user common.User
-	err = common.DB.Where("username = ?", context.PostForm("username")).First(&user).Error
+	if err = context.ShouldBind(&user); err != nil {
+		fmt.Printf("%v\n", err)
+		return nil, gin.H{"message": "Bind failed"}
+	}
+	err = common.DB.Where("username = ?", user.Username).First(&user).Error
 	// no duplicate users, sign up
 	if err == gorm.ErrRecordNotFound {
-		user := common.User{
-			Username: context.PostForm("username"),
-			Password: context.PostForm("password"),
-		}
+		user.IsAdmin = false
+		user.Rank = "Normal"
 		common.DB.Create(&user)
 		session := sessions.Default(context)
 		session.Clear()
@@ -73,5 +76,5 @@ func IsAdmin(context *gin.Context) bool {
 	userId := DefaultUserId(context)
 	var user common.User
 	common.DB.First(&user, userId)
-	return user.Username == "admin"
+	return user.IsAdmin
 }

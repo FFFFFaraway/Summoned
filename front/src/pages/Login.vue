@@ -1,12 +1,16 @@
 <template>
   <div>
-    <h1>Login</h1>
-    <label for="username">Username: </label
-    ><input type="text" v-model="username" id="username" />
-    <label for="password">Password: </label
-    ><input type="password" v-model="password" id="password" />
-    <button @click="submit">Log in</button>
-    <button @click="reset">Reset</button>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Login</span>
+      </div>
+    <label for="username">Username: </label>
+    <el-input type="text" v-model="username" id="username" ></el-input>
+    <label for="password">Password: </label>
+    <el-input type="password" v-model="password" id="password" ></el-input>
+    <el-button type="primary" @click="submit">Log in</el-button>
+    <el-button type="primary" @click="reset">Reset</el-button>
+    </el-card>
   </div>
 </template>
 

@@ -1,15 +1,13 @@
 <template>
   <div>
-    <router-link to="/home">Home</router-link> |
-    <router-link to="/signup" v-show="!signedIn">Sign up</router-link> |
-    <router-link to="/login" v-show="!signedIn">Log in</router-link> |
-    <router-link :to="'/profile/' + this.signed" v-show="signedIn">Profile</router-link> |
-    <router-link to="/mysummoned" v-show="signedIn">My summoned</router-link> |
-    <router-link to="/othersummoned" v-show="signedIn"
-      >Others summoned</router-link
-    >
-    | <router-link to="/summoned">Search summoned</router-link> |
-    <button @click="logout" v-show="signedIn">Log out</button>
+    <span><router-link to="/home">Home</router-link> | </span>
+    <span v-show="!signedIn"><router-link to="/signup">Sign up</router-link> | </span>
+    <span v-show="!signedIn"><router-link to="/login">Log in</router-link> | </span>
+    <span v-show="signedIn"><router-link :to="'/profile/' + this.signed">Profile</router-link> | </span>
+    <span v-show="signedIn"><router-link to="/mysummoned">My summoned</router-link> | </span>
+    <span v-show="signedIn"><router-link to="/othersummoned">Others summoned</router-link> | </span>
+    <span><router-link to="/summoned">Search summoned</router-link> | </span>
+    <el-button type="primary" @click="logout" v-show="signedIn">Log out</el-button>
   </div>
 </template>
 

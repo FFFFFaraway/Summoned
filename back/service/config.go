@@ -8,7 +8,7 @@ import (
 
 func GetCorsConfig() gin.HandlerFunc{
 	return cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:8080"},
+		AllowOrigins:     []string{"http://localhost:8080", "http://10.128.252.137:8080"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Access-Token"},
 		ExposeHeaders:    []string{"Content-Length"},

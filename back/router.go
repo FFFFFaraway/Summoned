@@ -46,5 +46,6 @@ func myRouter() *gin.Engine {
 	r.Use(adminMid)
 	r.GET("/users", getAllUsers)
 	r.GET("/requestsAll", getAllRequests)
+	r.GET("/transaction", getTransactions)
 	return r
 }

@@ -1,11 +1,19 @@
 <template>
   <div>
     <div v-if="this.signed >= 0">
-      <h1>My released Summoneds</h1>
-      <list :summoneds="summoneds" />
-      <hr />
-      <h1>Release a NEW Summoned</h1>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>My released Summoneds</span>
+        </div>
+        <list :summoneds="summoneds" />
+      </el-card>
+      <br>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>Release a NEW Summoned</span>
+        </div>
       <creSum />
+      </el-card>
     </div>
     <div v-else>
       <p>please sign in for more information</p>

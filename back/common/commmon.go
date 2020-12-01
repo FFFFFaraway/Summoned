@@ -6,9 +6,17 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `form:"username" json:"username"`
-	Password string `form:"password" json:"password"`
-	Phone    string `form:"phone" json:"phone"`
+	Username     string `form:"username" json:"username"`
+	Password     string `form:"password" json:"password"`
+	IsAdmin      bool   `form:"is_admin" json:"is_admin"`
+	Name         string `form:"name" json:"name"`
+	NumberType   string `form:"number_type" json:"number_type"`
+	Number       string `form:"number" json:"number"`
+	Phone        string `form:"phone" json:"phone"`
+	// Rank: ["Diamond", "VIP", "Normal"]
+	Rank         string `form:"rank" json:"rank"`
+	Introduction string `form:"introduction" json:"introduction"`
+	City         string `form:"city" json:"city"`
 }
 
 type Summoned struct {
@@ -20,7 +28,8 @@ type Summoned struct {
 	People int    `form:"people" json:"people"`
 	Ddl    string `form:"ddl" json:"ddl"`
 	// img 不通过ShouldBind函数进行绑定
-	Img    string
+	Img string
+	// Status: ["Waiting", "Complete", "Cancelled", "Expired"]
 	Status string `form:"status" json:"status"`
 }
 
@@ -29,16 +38,16 @@ type Request struct {
 	SummonedID uint   `form:"summoned_id" json:"summoned_id"`
 	UserID     uint   `form:"user_id" json:"user_id"`
 	Desc       string `form:"desc" json:"desc"`
-	// Status: ["Not", "Waiting", "Accepted", "Rejected"]
-	Status string     `form:"status" json:"status"`
+	// Status: ["Not", "Cancelled", "Waiting", "Accepted", "Rejected"]
+	Status string `form:"status" json:"status"`
 }
 
 type Transaction struct {
 	gorm.Model
-	OwnerID   uint   `form:"owner_id" json:"owner_id"`
-	TakerID   uint   `form:"taker_id" json:"taker_id"`
-	OwnerCost int    `form:"owner_cost" json:"owner_cost"`
-	TakerCost int    `form:"taker_cost" json:"taker_cost"`
+	OwnerID   uint `form:"owner_id" json:"owner_id"`
+	TakerID   uint `form:"taker_id" json:"taker_id"`
+	OwnerCost int  `form:"owner_cost" json:"owner_cost"`
+	TakerCost int  `form:"taker_cost" json:"taker_cost"`
 }
 
 var DB *gorm.DB

@@ -5,9 +5,14 @@
     </div>
     <div v-else>
       <label for="desc">Description: </label>
-      <input type="text" v-model="newRequest.desc" id="desc" />
+      <el-input type="text" v-model="newRequest.desc" id="desc" ></el-input>
       <br />
-      <button @click="submit">Request</button>
+      <el-popconfirm
+        title="确定发起请求？"
+        @confirm="submit"
+      >
+      <el-button slot="reference" type="primary">Request</el-button>
+      </el-popconfirm>
     </div>
   </div>
 </template>

@@ -1,28 +1,36 @@
 <template>
   <div>
     <div v-if="this.signed >= 0">
-      <h1>Others released Summoned</h1>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>Others released Summoned</span>
+        </div>
       <list :summoneds="summoneds" />
-
-      <hr />
-      <h1>Your requests</h1>
-      <ul>
-        <li v-for="r in passedRequests" :key="r.ID">
-          <p>
-            Summoned ID: {{ r.summoned_id }}, Desc: {{ r.desc }}, Status: {{ r.status }}
-          </p>
-        </li>
-        <li v-for="r in waitRequests" :key="r.ID">
-          <p>
-            Summoned ID: {{ r.summoned_id }},
-            Desc: 
-            <input type="text" v-model="r.desc">,
-            Status: {{ r.Status }}
-            <button @click="update(r)">update</button>
-            <button @click="del(r)">delete</button>
-          </p>
-        </li>
-      </ul>
+      </el-card>
+      
+      <br>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>Your requests</span>
+        </div>
+        <ul>
+          <li v-for="r in passedRequests" :key="r.ID">
+            <p>
+              Summoned ID: {{ r.summoned_id }}, Desc: {{ r.desc }}, Status: {{ r.status }}
+            </p>
+          </li>
+          <li v-for="r in waitRequests" :key="r.ID">
+            <p>
+              Summoned ID: {{ r.summoned_id }},
+              Desc: 
+              <el-input type="text" v-model="r.desc"></el-input>
+              Status: {{ r.status }}
+              <el-button type="primary" @click="update(r)">update</el-button>
+              <el-button type="primary" @click="cancel(r)">cancel</el-button>
+            </p>
+          </li>
+        </ul>
+      </el-card>
     </div>
     <div v-else>
       <p>please sign in for more information</p>
@@ -44,7 +52,7 @@ export default {
   computed: {
     ...mapState("auth", ["signed"]),
     passedRequests() {
-      return this.requests.filter(r => r.status == 'Accepted' || r.status == 'Rejected')
+      return this.requests.filter(r => r.status != 'Waiting')
     },
     waitRequests() {
       return this.requests.filter(r => r.status == 'Waiting')
@@ -66,12 +74,12 @@ export default {
           console.log(response);
         });
     },
-    del(request) {
+    cancel(request) {
       let that = this;
       this.$axios
         .delete("request/" + request.ID)
         .then(function () {
-          alert("Successfully delete the request");
+          alert("Successfully cancel the request");
           that.$router.go();
         })
         .catch(function (response) {

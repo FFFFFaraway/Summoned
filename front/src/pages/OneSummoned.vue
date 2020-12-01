@@ -1,52 +1,61 @@
 <template>
   <div>
+    <!-- error message -->
     <div v-if="this.message != null">
       {{message}}
     </div>
     <div v-else>
       <sumDtl :summoned="summoned"/>
-
-      <div v-if="this.summoned.user_id == this.signed">
-        <hr />
-        <h1>Exist Waiting Requests for this summoned</h1>
-        <ul>
-          <li v-for="r in waitingRequests" :key="r.ID">
-            <p>ID: {{ r.user_id }}, Desc: {{ r.desc }}</p>
-            <router-link :to="'../profile/' + r.user_id">User Profile</router-link>
-            <br>
-            <button @click="acc(r.user_id)">Accept</button>
-            <button @click="rej(r.user_id)">Reject</button>
-          </li>
-        </ul>
-      </div>
-
-      <hr />
-      <div v-if="this.signed == -1">
-        <p>Please sign in for more information</p>
-      </div>
-      <div v-else>
+      <div v-if="this.summoned.status == 'Waiting'">
+        <br>
+        <!-- 令主 -->
         <div v-if="this.summoned.user_id == this.signed">
-          <div v-if="this.requests.length == 0">
-            <h1>Update Your Summoned</h1>
-            <updSum :summoned="this.summoned" />
-          </div>
-          <div v-else>
-            <p>Someone has sent request, can't update anymore</p>
-          </div>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span v-if="this.waitingRequests.length > 0">Exist Waiting Requests for this summoned</span>
+              <span v-else>No Waiting Requests for this summoned</span>
+            </div>
+            <ul>
+              <li v-for="r in waitingRequests" :key="r.ID">
+                <p>ID: {{ r.user_id }}, Desc: {{ r.desc }}</p>
+                <router-link :to="'../profile/' + r.user_id">User Profile</router-link>
+                <br>
+                <el-button type="primary" @click="acc(r.user_id)">Accept</el-button>
+                <el-button type="primary" @click="rej(r.user_id)">Reject</el-button>
+              </li>
+            </ul>
+          </el-card>
+        </div>
+        <br>
+        <!-- 未登录 -->
+        <div v-if="this.signed == -1">
+          <p>Please sign in for more information</p>
         </div>
         <div v-else>
-          <div v-if="this.requestStatus == 'Not'">
-            <h1>Take This Summoned</h1>
-            <reqSum :summoned="this.summoned" />
+          <!-- 令主，修改召集令 -->
+          <div v-if="this.summoned.user_id == this.signed">
+            <div v-if="this.requests.length == 0">
+              <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                  <span>Update Your Summoned</span>
+                </div>
+              <updSum :summoned="this.summoned" />
+              </el-card>
+            </div>
+            <div v-else>
+              <el-card>
+                <p>Someone has sent request, can't update anymore</p>
+              </el-card>
+            </div>
           </div>
-          <div v-if="this.requestStatus == 'Waiting'">
-            <h1>Waiting for response, you can still change your request</h1>
-          </div>
-          <div v-if="this.requestStatus == 'Accepted'">
-            <h1>Your request has been Accepted</h1>
-          </div>
-          <div v-if="this.requestStatus == 'Rejected'">
-            <h1>Your request has been Rejected</h1>
+          <!-- 不是令主，请求 -->
+          <div v-else>
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{requestStatusMessage[requestStatus]}}</span>
+              </div>
+              <reqSum v-if="this.requestStatus == 'Not'" :summoned="this.summoned" />
+            </el-card>
           </div>
         </div>
       </div>
@@ -68,13 +77,19 @@ export default {
       summoned: {},
       message: null,
       requestStatus: false,
+      requestStatusMessage: {
+        "Not": "Take This Summoned",
+        "Waiting": "Waiting for response, you can still change your request",
+        "Accepted": "Your request has been Accepted",
+        "Rejected": "Your request has been Rejected",
+      },
       requests: [],
     };
   },
   computed: {
     ...mapState("auth", ["signed"]),
     waitingRequests: function () {
-      return this.requests.filter((r) => r.Status === "Waiting");
+      return this.requests.filter((r) => r.status === "Waiting");
     },
   },
   methods: {

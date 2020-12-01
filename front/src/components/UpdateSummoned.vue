@@ -3,23 +3,24 @@
     <el-select v-model="summoned.type">
       <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
     </el-select>
+    <br />
     <label for="name">Name: </label>
-    <input type="text" v-model="summoned.name" id="name" />
+    <el-input type="text" v-model="summoned.name" id="name" ></el-input>
     <br />
     <label for="desc">Description: </label>
-    <input type="text" v-model="summoned.desc" id="desc" />
+    <el-input type="text" v-model="summoned.desc" id="desc" ></el-input>
     <br />
     <label for="people">People Needed: </label>
-    <input type="number" v-model.number="summoned.people" id="people" />
+    <el-input type="number" v-model.number="summoned.people" id="people" ></el-input>
     <br />
     <label for="ddl">Deadline: </label>
-    <input type="text" v-model="summoned.ddl" id="ddl" />
+    <el-input type="text" v-model="summoned.ddl" id="ddl" ></el-input>
     <br />
     <label for="img">Image: </label>
-    <input type="file" @change="processImg($event)" id="img" />
+    <el-input type="file" @change="processImg($event)" id="img" ></el-input>
     <br />
-    <button @click="submit">Update</button>
-    <button @click="deleteSummoned">Delete</button>
+    <el-button type="primary" @click="submit">Update</el-button>
+    <el-button type="primary" @click="deleteSummoned">Delete</el-button>
   </div>
 </template>
 

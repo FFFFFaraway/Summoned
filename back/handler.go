@@ -86,6 +86,9 @@ func updateProfile(context *gin.Context) {
 	if context.PostForm("phone") != "" {
 		user.Phone = context.PostForm("phone")
 	}
+	if context.PostForm("introduction") != "" {
+		user.Introduction = context.PostForm("introduction")
+	}
 	common.DB.Save(&user)
 	context.JSON(http.StatusOK, gin.H{
 		"message": "successfully updated",
@@ -157,7 +160,7 @@ func getRequestStatus(context *gin.Context) {
 	summonedId := context.Param("id")
 	userId := service.DefaultUserId(context)
 	var req common.Request
-	err = common.DB.Where("summoned_id = ? and user_id = ?", summonedId, userId).First(&req).Error
+	err = common.DB.Where("summoned_id = ? and user_id = ? and status <> 'Cancelled'", summonedId, userId).First(&req).Error
 	if err == gorm.ErrRecordNotFound { // haven't sent request yet
 		context.JSON(http.StatusOK, gin.H{
 			"requestStatus": "Not",
@@ -201,6 +204,12 @@ func updateRequestStatus(context *gin.Context) {
 		trans.OwnerCost = 3 * people
 		trans.TakerCost = 1
 		common.DB.Create(&trans)
+
+		var summoned common.Summoned
+		common.DB.First(&summoned, req.SummonedID)
+		summoned.Status = "Complete"
+		common.DB.Save(&summoned)
+
 		context.JSON(http.StatusOK, nil)
 	}
 }
@@ -262,7 +271,8 @@ func deleteRequest(context *gin.Context) {
 	}
 	var reqInMysql common.Request
 	common.DB.First(&reqInMysql, reqId)
-	common.DB.Delete(&reqInMysql)
+	reqInMysql.Status = "Cancelled"
+	common.DB.Save(&reqInMysql)
 	context.JSON(http.StatusOK, nil)
 }
 
@@ -300,4 +310,10 @@ func getAllRequests(context *gin.Context) {
 	var reqs []common.Request
 	common.DB.Find(&reqs)
 	context.JSON(http.StatusOK, reqs)
+}
+
+func getTransactions(context *gin.Context) {
+	var trans []common.Transaction
+	common.DB.Find(&trans)
+	context.JSON(http.StatusOK, trans)
 }

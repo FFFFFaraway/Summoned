@@ -3,22 +3,23 @@
     <el-select v-model="newSummoned.type">
       <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
     </el-select>
+    <br />
     <label for="name">Name: </label>
-    <input type="text" v-model="newSummoned.name" id="name" />
+    <el-input type="text" v-model="newSummoned.name" id="name" ></el-input>
     <br />
     <label for="desc">Description: </label>
-    <input type="text" v-model="newSummoned.desc" id="desc" />
+    <el-input type="text" v-model="newSummoned.desc" id="desc" ></el-input>
     <br />
     <label for="people">People Needed: </label>
-    <input type="number" v-model.number="newSummoned.people" id="people" />
+    <el-input type="number" v-model.number="newSummoned.people" id="people" ></el-input>
     <br />
     <label for="ddl">Deadline: </label>
-    <input type="date" v-model="newSummoned.ddl" id="ddl" />
+    <el-input type="date" v-model="newSummoned.ddl" id="ddl" ></el-input>
     <br />
     <label for="img">Image: </label>
-    <input type="file" @change="processImg($event)" id="img" />
+    <input type="file" @change="processImg($event)" id="img" >
     <br />
-    <button @click="submit">Add</button>
+    <el-button type="primary" @click="submit">Add</el-button>
   </div>
 </template>
 
@@ -88,7 +89,6 @@ export default {
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 
 

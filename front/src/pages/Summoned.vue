@@ -1,15 +1,18 @@
 <template>
   <div>
-    <h1>Summoned</h1>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>Summoned</span>
+      </div>
     <label for="name">Search by Name</label>
-    <input type="text" v-model="filterName" id="name" />
+    <el-input type="text" v-model="filterName" id="name" ></el-input>
     <br />
     <label>Search by Type</label>
     <el-select v-model="filterType">
       <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
     </el-select>
-    <hr />
     <list :summoneds="summoneds" />
+    </el-card>
   </div>
 </template>
 

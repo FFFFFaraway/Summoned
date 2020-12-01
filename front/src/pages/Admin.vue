@@ -9,7 +9,7 @@
 
     <h1>Summoneds</h1>
     <label for="name">Search by Name</label>
-    <input type="text" v-model="filterName" id="name" />
+    <el-input type="text" v-model="filterName" id="name" ></el-input>
     <br />
     <label>Search by Type</label>
     <el-select v-model="filterType">
@@ -37,6 +37,15 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <h1>Transactions</h1>
+    <el-table :data="transactions">
+      <div v-for="name in transactionOptions" :key="name">
+        <el-table-column :prop="name" :label="name"> </el-table-column>
+      </div>
+    </el-table>
+
+    <h1>累计收益：{{profits}}</h1>
   </div>
 </template>
 
@@ -74,6 +83,15 @@ export default {
         "user_id",
         "desc",
       ],
+      transactionOptions: [
+        "taker_cost",
+        "ID",
+        "CreatedAt",
+        "UpdatedAt",
+        "owner_id",
+        "taker_id",
+        "owner_cost",
+      ],
       options: [
         "",
         "技术交流",
@@ -86,6 +104,7 @@ export default {
       allSummoneds: [],
       users: [],
       requests: [],
+      transactions: [],
       filterType: "",
       filterName: "",
     };
@@ -104,6 +123,11 @@ export default {
         .filter((s) => s.name.includes(this.filterName))
         .filter((s) => s.type == this.filterType);
     },
+    profits() {
+      let res = 0
+      this.transactions.forEach(t => res += t.owner_cost + t.taker_cost);
+      return res
+    }
   },
   mounted() {
     let that = this;
@@ -127,6 +151,14 @@ export default {
       .get("requestsAll")
       .then(function (response) {
         that.requests = response.data;
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
+    this.$axios
+      .get("transaction")
+      .then(function (response) {
+        that.transactions = response.data;
       })
       .catch(function (response) {
         console.log(response);
