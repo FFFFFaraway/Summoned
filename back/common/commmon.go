@@ -50,4 +50,12 @@ type Transaction struct {
 	TakerCost int  `form:"taker_cost" json:"taker_cost"`
 }
 
+type Profit struct {
+	Date string `form:"date" json:"date"`
+	City string `form:"city" json:"city"`
+	SummonedType string `form:"type" json:"type"`
+	Count uint `form:"count" json:"count"`
+	Cost int `form:"cost" json:"cost"`
+}
+
 var DB *gorm.DB

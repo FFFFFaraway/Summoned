@@ -1,6 +1,7 @@
 package main
 
 import (
+	"back/handler"
 	"back/service"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -12,40 +13,40 @@ func myRouter() *gin.Engine {
 	store := cookie.NewStore([]byte("secret"))
 	r.Use(sessions.Sessions("mysession", store), service.GetCorsConfig())
 
-	r.POST("/signup", signup)
-	r.POST("/login", login)
-	r.GET("/signed", getIsLogin)
-	r.GET("/summoned", getAllSummoned)
-	r.GET("/summoned/:id", getSummoned)
+	r.POST("/signup", handler.Signup)
+	r.POST("/login", handler.Login)
+	r.GET("/signed", handler.GetIsLogin)
+	r.GET("/summoned", handler.GetAllSummoned)
+	r.GET("/summoned/:id", handler.GetSummoned)
 	r.Static("img", "img")
 
-	r.Use(loginMid)
+	r.Use(handler.LoginMid)
 
 	{
-		r.GET("/profile/:id", getProfile)
-		r.POST("/profile", updateProfile)
+		r.GET("/profile/:id", handler.GetProfile)
+		r.POST("/profile", handler.UpdateProfile)
 	}
 	{
-		r.GET("/mysummoned", getSummonedByDefault)
-		r.POST("/mysummoned", newSummoned)
-		r.PUT("/mysummoned", updateSummonedByDefault)
-		r.DELETE("/mysummoned/:id", deleteSummoned)
+		r.GET("/mysummoned", handler.GetSummonedByDefaultUser)
+		r.POST("/mysummoned", handler.NewSummoned)
+		r.PUT("/mysummoned", handler.UpdateSummonedByDefaultUser)
+		r.DELETE("/mysummoned/:id", handler.DeleteSummoned)
 	}
 	{
-		r.GET("/requestStatus/:id", getRequestStatus)
-		r.PUT("/requestStatus/:id", updateRequestStatus)
+		r.GET("/requestStatus/:id", handler.GetRequestStatus)
+		r.PUT("/requestStatus/:id", handler.UpdateRequestStatus)
 
-		r.GET("/request/:id", getRequest)
-		r.GET("/requestByUser", getRequestByUser)
-		r.POST("/request", newRequest)
-		r.PUT("/request", updateRequest)
-		r.DELETE("/request/:id", deleteRequest)
+		r.GET("/request/:id", handler.GetRequest)
+		r.GET("/requestByUser", handler.GetRequestByUser)
+		r.POST("/request", handler.NewRequest)
+		r.PUT("/request", handler.UpdateRequest)
+		r.DELETE("/request/:id", handler.DeleteRequest)
 	}
-	r.GET("/othersummoned", getSummonedExceptDefault)
-	r.POST("/signed", logout)
-	r.Use(adminMid)
-	r.GET("/users", getAllUsers)
-	r.GET("/requestsAll", getAllRequests)
-	r.GET("/transaction", getTransactions)
+	r.GET("/othersummoned", handler.GetSummonedExceptDefaultUser)
+	r.POST("/signed", handler.Logout)
+	r.Use(handler.AdminMid)
+	r.GET("/users", handler.GetAllUsers)
+	r.GET("/requestsAll", handler.GetAllRequests)
+	r.GET("/transaction", handler.GetTransactions)
 	return r
 }

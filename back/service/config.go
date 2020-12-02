@@ -1,8 +1,10 @@
 package service
 
 import (
+	"back/common"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
@@ -18,4 +20,25 @@ func GetCorsConfig() gin.HandlerFunc{
 		},
 		MaxAge: 12 * time.Hour,
 	})
+}
+
+func DBConfig() error {
+	common.DB, err = gorm.Open("mysql", "root:123456@/summoned?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		return err
+	}
+	common.DB.AutoMigrate(&common.User{})
+	common.DB.AutoMigrate(&common.Summoned{})
+	common.DB.AutoMigrate(&common.Request{})
+	common.DB.AutoMigrate(&common.Transaction{})
+	common.DB.AutoMigrate(&common.Profit{})
+	common.DB.Model(&common.Summoned{}).
+		AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
+	common.DB.Model(&common.Request{}).
+		AddForeignKey("summoned_id", "summoneds(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
+	common.DB.Model(&common.Transaction{}).
+		AddForeignKey("owner_id", "users(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("taker_id", "users(id)", "RESTRICT", "RESTRICT")
+	return nil
 }
