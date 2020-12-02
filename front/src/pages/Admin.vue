@@ -88,15 +88,14 @@
         <el-option v-for="item in cityOptions" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <br>
-      <el-table :data="filterProfits">
-        <div v-for="name in profitOptions" :key="name">
-          <el-table-column v-if="name == 'count' || name == 'cost'" :prop="name" :label="name" sortable> </el-table-column>
-          <el-table-column v-else :prop="name" :label="name"> </el-table-column>
-        </div>
-      </el-table>
       <div class="small">
         <chart :chart-data="profitChartData"></chart>
       </div>
+      <el-table :data="filterProfits">
+        <div v-for="name in profitOptions" :key="name">
+          <el-table-column :prop="name" :label="name" sortable> </el-table-column>
+        </div>
+      </el-table>
     </el-card>
     <br>
 
@@ -254,7 +253,7 @@ export default {
     },
     profitChartData() {
       if(this.filterProfits.length == 0)
-        return {labels: null,datasets: null}
+        return {labels: [],datasets: []}
       var startTime, endTime
       if(this.startTime != ""){
         startTime = new Date(this.startTime)
@@ -272,6 +271,7 @@ export default {
           if(new Date(this.filterProfits[p].date) > endTime)endTime = new Date(this.filterProfits[p].date)
         }
       }
+      endTime = new Date(endTime.setMonth(endTime.getMonth()+1))
       var labelsList = []
       var accCount = []
       var accCost = []
@@ -290,7 +290,9 @@ export default {
       }
 
       var countData = []
+      countData.push(accCount[0])
       var costData = []
+      costData.push(accCost[0])
       for(let i=1;i<accCount.length;i++){
         countData[i] = accCount[i] - accCount[i-1]
       }
@@ -363,7 +365,6 @@ export default {
 
 <style>
   .small {
-    max-width: 600px;
-    margin:  150px auto;
+    max-width: 400px;
   }
 </style>
