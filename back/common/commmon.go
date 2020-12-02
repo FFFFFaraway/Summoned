@@ -6,13 +6,13 @@ import (
 
 type User struct {
 	gorm.Model
-	Username     string `form:"username" json:"username"`
-	Password     string `form:"password" json:"password"`
-	IsAdmin      bool   `form:"is_admin" json:"is_admin"`
-	Name         string `form:"name" json:"name"`
-	NumberType   string `form:"number_type" json:"number_type"`
-	Number       string `form:"number" json:"number"`
-	Phone        string `form:"phone" json:"phone"`
+	Username   string `form:"username" json:"username"`
+	Password   string `form:"password" json:"password"`
+	IsAdmin    bool   `form:"is_admin" json:"is_admin"`
+	Name       string `form:"name" json:"name"`
+	NumberType string `form:"number_type" json:"number_type"`
+	Number     string `form:"number" json:"number"`
+	Phone      string `form:"phone" json:"phone"`
 	// Rank: ["Diamond", "VIP", "Normal"]
 	Rank         string `form:"rank" json:"rank"`
 	Introduction string `form:"introduction" json:"introduction"`
@@ -51,11 +51,11 @@ type Transaction struct {
 }
 
 type Profit struct {
-	Date string `form:"date" json:"date"`
-	City string `form:"city" json:"city"`
-	SummonedType string `form:"type" json:"type"`
-	Count uint `form:"count" json:"count"`
-	Cost int `form:"cost" json:"cost"`
+	Date         string `form:"date" json:"date"`
+	City         string `form:"city" json:"city"`
+	SummonedType string `form:"summoned_type" json:"summoned_type"`
+	Count        uint   `form:"count" json:"count"`
+	Cost         int    `form:"cost" json:"cost"`
 }
 
 var DB *gorm.DB

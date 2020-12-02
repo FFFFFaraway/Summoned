@@ -33,3 +33,10 @@ func GetTransactions(context *gin.Context) {
 	common.DB.Find(&trans)
 	context.JSON(http.StatusOK, trans)
 }
+
+func GetProfits(context *gin.Context) {
+	var profits []common.Profit
+	common.DB.Select("date, city, summoned_type, sum(count) as count, sum(cost) as cost").
+		Group("date, city, summoned_type").Find(&profits)
+	context.JSON(http.StatusOK, profits)
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func GetRequestStatus(context *gin.Context) {
@@ -52,7 +53,7 @@ func UpdateRequestStatus(context *gin.Context) {
 		var people int
 		if people, err = strconv.Atoi(context.PostForm("people")); err != nil {
 			fmt.Printf("%v\n", err)
-			context.JSON(http.StatusBadRequest, gin.H{"message": "ID Atoi failed"})
+			context.JSON(http.StatusBadRequest, gin.H{"message": "people Atoi failed"})
 			return
 		}
 		trans.OwnerCost = 3 * people
@@ -63,6 +64,16 @@ func UpdateRequestStatus(context *gin.Context) {
 		common.DB.First(&summoned, req.SummonedID)
 		summoned.Status = "Complete"
 		common.DB.Save(&summoned)
+
+		var profit common.Profit
+		var owner common.User
+		common.DB.First(&owner, trans.OwnerID)
+		profit.Date = time.Now().Format("2006-01-02")
+		profit.City = owner.City
+		profit.SummonedType = summoned.Type
+		profit.Count = 1
+		profit.Cost = trans.OwnerCost + trans.TakerCost
+		common.DB.Create(&profit)
 
 		context.JSON(http.StatusOK, nil)
 	}

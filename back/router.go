@@ -48,5 +48,6 @@ func myRouter() *gin.Engine {
 	r.GET("/users", handler.GetAllUsers)
 	r.GET("/requestsAll", handler.GetAllRequests)
 	r.GET("/transaction", handler.GetTransactions)
+	r.GET("/profit", handler.GetProfits)
 	return r
 }

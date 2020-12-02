@@ -1,5 +1,7 @@
 <template>
   <div>
+    <label for="name">Summoned Type: </label>
+    <br />
     <el-select v-model="newSummoned.type">
       <el-option v-for="item in options" :key="item" :label="item" :value="item"></el-option>
     </el-select>
@@ -17,6 +19,7 @@
     <el-input type="date" v-model="newSummoned.ddl" id="ddl" ></el-input>
     <br />
     <label for="img">Image: </label>
+    <br />
     <input type="file" @change="processImg($event)" id="img" >
     <br />
     <el-button type="primary" @click="submit">Add</el-button>
