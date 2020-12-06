@@ -17,6 +17,7 @@
           <li v-for="r in passedRequests" :key="r.ID">
             <p>
               Summoned ID: {{ r.summoned_id }}, Desc: {{ r.desc }}, Status: {{ r.status }}
+              <router-link v-if="r.status == 'Accepted'" :to="'../summoned/' + r.summoned_id">details</router-link>
             </p>
           </li>
           <li v-for="r in waitRequests" :key="r.ID">

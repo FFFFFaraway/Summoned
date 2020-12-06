@@ -43,6 +43,9 @@ func saveFile(file multipart.File, fileName string) error {
 }
 
 func checkExpired(summoned *common.Summoned) (bool, error){
+	if summoned.Status != "Waiting" {
+		return false, nil
+	}
 	now := time.Now()
 	ddl, err := time.Parse("2006-01-02", summoned.Ddl)
 	if err != nil {
@@ -58,6 +61,7 @@ func checkExpired(summoned *common.Summoned) (bool, error){
 
 func NewSummoned(summoned common.Summoned, file multipart.File, userId interface{}) error{
 	summoned.UserID = userId.(uint)
+	summoned.Status = "Waiting"
 	if _, err = checkExpired(&summoned); err != nil {
 		return err
 	}
