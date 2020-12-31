@@ -34,7 +34,7 @@ export default {
     submit() {
       let that = this;
       var formData = new FormData();
-      if (this.newRequest.desc == null) {
+      if (this.newRequest.desc == "") {
         alert("Please fill desc before request");
         return;
       }
